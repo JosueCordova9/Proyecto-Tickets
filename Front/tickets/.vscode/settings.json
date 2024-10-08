@@ -1,0 +1,5 @@
+{
+    "java.compile.nullAnalysis.mode": "automatic",
+    "cmake.sourceDirectory": "/mnt/Datos/FlutterProjects/tickets/linux/flutter",
+    "cmake.ignoreCMakeListsMissing": true
+}
