@@ -2,6 +2,7 @@ package main
 
 import (
 	model "BackTickets/Model"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
@@ -9,10 +10,37 @@ import (
 )
 
 func getUsuarios(db *gorm.DB) ([]model.Usuarios, error) {
-	var users []model.Usuarios
-	result := db.Find(&users)
-	return users, result.Error
+	var usuarios []model.Usuarios
+	result := db.Find(&usuarios)
+	return usuarios, result.Error
 
+}
+
+func getClientes(db *gorm.DB) ([]model.Clientes, error) {
+	var clientes []model.Clientes
+	result := db.Find(&clientes)
+	return clientes, result.Error
+
+}
+
+func getProductos(db *gorm.DB) ([]model.Productos, error) {
+	var productos []model.Productos
+	result := db.Find(&productos)
+	return productos, result.Error
+
+}
+
+func getOrdenes(db *gorm.DB) ([]model.Ordenventa, error) {
+	var ordenes []model.Ordenventa
+	result := db.Find(&ordenes)
+	return ordenes, result.Error
+
+}
+
+func getDetalles(db *gorm.DB) ([]model.Detalleorden, error) {
+	var detalles []model.Detalleorden
+	result := db.Find(&detalles)
+	return detalles, result.Error
 }
 
 func main() {
@@ -26,12 +54,63 @@ func main() {
 		panic("failed to connect database")
 	}
 
+	db.AutoMigrate(&model.Usuarios{})
+
 	//inicializa un servidor
 	r := gin.Default()
 
 	r.GET("/usuarios", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": users,
+		usuarios, err := getUsuarios(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"usuarios": usuarios,
+		})
+	})
+
+	r.GET("/clientes", func(c *gin.Context) {
+		clientes, err := getClientes(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"clientes": clientes,
+		})
+	})
+
+	r.GET("/productos", func(c *gin.Context) {
+		productos, err := getProductos(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"productos": productos,
+		})
+	})
+
+	r.GET("/ordenes", func(c *gin.Context) {
+		ordenes, err := getOrdenes(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"ordenes": ordenes,
+		})
+	})
+
+	r.GET("/detalles", func(c *gin.Context) {
+		detalles, err := getDetalles(db)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"detalles": detalles,
 		})
 	})
 	r.Run()
