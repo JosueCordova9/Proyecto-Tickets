@@ -1,7 +1,7 @@
 package main
 
 import (
-	model "BackTickets/Model"
+	model "BackTickets/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,11 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
+//GET
+
 func getUsuarios(db *gorm.DB) ([]model.Usuarios, error) {
 	var usuarios []model.Usuarios
 	result := db.Find(&usuarios)
 	return usuarios, result.Error
-
 }
 
 func getClientes(db *gorm.DB) ([]model.Clientes, error) {
@@ -54,10 +55,10 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&model.Usuarios{})
-
 	//inicializa un servidor
 	r := gin.Default()
+
+	//GET
 
 	r.GET("/usuarios", func(c *gin.Context) {
 		usuarios, err := getUsuarios(db)
@@ -112,6 +113,40 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{
 			"detalles": detalles,
 		})
+	})
+
+	//POST
+
+	r.POST("/usuarios", func(c *gin.Context) {
+		var usuario model.Usuarios
+		if err := c.ShouldBindJSON(&usuario); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+
+		}
+
+		db.Create(&usuario)
+
+		c.JSON(http.StatusCreated, gin.H{"message": "Usuario creado"})
+	})
+
+	db.AutoMigrate(&model.Usuarios{})
+	db.AutoMigrate(&model.Productos{})
+	db.AutoMigrate(&model.Ordenventa{})
+	db.AutoMigrate(&model.Detalleorden{})
+	db.AutoMigrate(&model.Clientes{})
+
+	r.POST("/productos", func(c *gin.Context) {
+		var producto model.Productos
+		if err := c.ShouldBindJSON(&producto); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+
+		}
+
+		db.Create(&producto)
+
+		c.JSON(http.StatusCreated, gin.H{"message": "Producto creado"})
 	})
 	r.Run()
 

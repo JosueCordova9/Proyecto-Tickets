@@ -1,7 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type Usuarios struct {
-	Id_usuario       uint
+	gorm.Model
 	Nombre_usuario   string
 	Usuario_usuario  string
 	Password_usuario string

@@ -1,4 +1,8 @@
+// import 'dart:convert';
 import "package:flutter/material.dart";
+// import 'package:http/http.dart' as http;
+
+
 
 class Registro extends StatefulWidget {
   const Registro({super.key});
@@ -14,8 +18,26 @@ class _RegistroState extends State<Registro> {
 
   final formKey = GlobalKey<FormState>();
 
-  submitForm() {
+  registrarUsuario() {
     if (formKey.currentState!.validate()) {
+    //   final response = http.post(
+    //     Uri.parse('localhost:8080/registrar'),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     },
+    //     body: jsonEncode(<String, String>{
+    //       'nombre': nombre,
+    //       'usuario': usuario,
+    //       'password': password
+    //     }),
+    //   );
+    //   if (response.statusCode == 201) {
+    //   // Registro exitoso
+    //   print('Usuario registrado exitosamente');
+    // } else {
+    //   // Manejar error
+    //   print('Error al registrar usuario: ${response.body}');
+    // }
       Navigator.pushNamed(context, '/');
     }
   }
@@ -75,7 +97,7 @@ class _RegistroState extends State<Registro> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButton(
-                          onPressed: submitForm,
+                          onPressed: registrarUsuario(),
                           child: const Text("Registrarse")),
                       TextButton(
                         onPressed: () {

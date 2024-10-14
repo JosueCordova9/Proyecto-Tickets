@@ -1,7 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type Productos struct {
-	Id_producto     uint
+	gorm.Model
 	Nombre_producto string
 	Precio_producto float32
 }

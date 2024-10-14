@@ -1,7 +1,9 @@
 package model
 
+import "gorm.io/gorm"
+
 type Clientes struct {
-	Id_cliente        uint
+	gorm.Model
 	Nombre_cliente    string
 	Apellido_cliente  string
 	Cedula_cliente    string
