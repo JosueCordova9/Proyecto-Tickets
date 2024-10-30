@@ -130,11 +130,7 @@ func main() {
 		c.JSON(http.StatusCreated, gin.H{"message": "Usuario creado"})
 	})
 
-	db.AutoMigrate(&model.Usuarios{})
 	db.AutoMigrate(&model.Productos{})
-	db.AutoMigrate(&model.Ordenventa{})
-	db.AutoMigrate(&model.Detalleorden{})
-	db.AutoMigrate(&model.Clientes{})
 
 	r.POST("/productos", func(c *gin.Context) {
 		var producto model.Productos
